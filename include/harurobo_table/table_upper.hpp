@@ -12,18 +12,21 @@ class DC_upper{
     const float POS_TARGET;
 
     public:
-    DC_upper(int CAN_ID,float TARGET)
+    DC_upper(int CAN_ID)//velocityモードで使う用
+    :CAN_ID(CAN_ID),Upper_state(upper_state::down),POS_TARGET(0)
+    {}//初期化
+    DC_upper(int CAN_ID,float TARGET)//positionモードで使う用
     :CAN_ID(CAN_ID),Upper_state(upper_state::down),POS_TARGET(TARGET)
     {}//初期化
     std::unique_ptr<can_plugins2::msg::Frame> update()
     {
         if(Upper_state == upper_state::down){
             Upper_state = upper_state::up;
-            return this->rise_by_pos();            
+            return this->rise_by_pos();
         }
         else{
             Upper_state = upper_state::down;
-            return this->fall_by_pos();           
+            return this->fall_by_pos();
         }
         
     }
