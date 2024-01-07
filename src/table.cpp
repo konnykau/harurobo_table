@@ -11,14 +11,14 @@
 
 using std::placeholders::_1;
 
-class table_node: public rclcpp::Node
+class holder_and_upper_for_koinobori: public rclcpp::Node
 {
 public:
-  table_node()
-  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640),doll_holder(0x300),doll_upper(0x660)
+  holder_and_upper_for_koinobori()
+  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640,1.0f),doll_holder(0x300),doll_upper(0x660,1.0f)
   {
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
-      "joy", 10, std::bind(&table_node::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
+      "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
     can_pub_ = this->create_publisher<can_plugins2::msg::Frame>("can_tx", 10);//canに対してpublish
   }
   
@@ -74,7 +74,7 @@ private:
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<table_node>());
+  rclcpp::spin(std::make_shared<holder_and_upper_for_koinobori>());
   rclcpp::shutdown();
   return 0;
 }

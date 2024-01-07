@@ -1,6 +1,6 @@
 #include <can_utils.hpp>
 #include "harurobo_table/send_data.hpp"
-constexpr float POS_TARGET = static_cast<float>(1.0);
+// constexpr float POS_TARGET = static_cast<float>(1.0);
 constexpr float VEL_TARGET = static_cast<float>(1.0);
 
 enum class upper_state{down,up};
@@ -9,10 +9,11 @@ class DC_upper{
     private:
     const uint16_t CAN_ID;//CAN ID
     upper_state Upper_state;
+    const float POS_TARGET;
 
     public:
-    DC_upper(int CAN_ID)
-    :CAN_ID(CAN_ID),Upper_state(upper_state::down)
+    DC_upper(int CAN_ID,float TARGET)
+    :CAN_ID(CAN_ID),Upper_state(upper_state::down),POS_TARGET(TARGET)
     {}//初期化
     std::unique_ptr<can_plugins2::msg::Frame> update()
     {
