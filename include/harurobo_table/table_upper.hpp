@@ -33,7 +33,7 @@ class DC_upper{
     }
     std::unique_ptr<can_plugins2::msg::Frame> fall_by_pos()
     {
-        return can_utils::shirasu_target(this->CAN_ID + 1,0);
+        return can_utils::shirasu_target(this->CAN_ID + 1,0.0f);
     }
     std::unique_ptr<can_plugins2::msg::Frame> rise_by_vel()
     {
@@ -45,7 +45,7 @@ class DC_upper{
     }
     std::unique_ptr<can_plugins2::msg::Frame> stop_vel()
     {
-        return can_utils::shirasu_target(this->CAN_ID + 1,0);
+        return can_utils::shirasu_target(this->CAN_ID + 1,0.0f);
     }
     std::unique_ptr<can_plugins2::msg::Frame> mode_vel()
     {

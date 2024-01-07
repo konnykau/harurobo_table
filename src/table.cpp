@@ -27,31 +27,31 @@ private:
   void topic_callback(const sensor_msgs::msg::Joy & msg)//この関数が随時実行されるらしい
   {
     if(msg.buttons[9]){//startボタン
-        can_pub_->publish(std::move(table_holder.mode_on()));
-        can_pub_->publish(std::move(table_upper.mode_pos()));
-        can_pub_->publish(std::move(doll_holder.mode_on()));
-        can_pub_->publish(std::move(doll_upper.mode_pos()));
+      can_pub_->publish(std::move(table_holder.mode_on()));
+      can_pub_->publish(std::move(table_upper.mode_pos()));
+      can_pub_->publish(std::move(doll_holder.mode_on()));
+      can_pub_->publish(std::move(doll_upper.mode_pos()));
     }//mode onにする
     if(msg.buttons[8]){//backボタン
-        can_pub_->publish(std::move(table_holder.mode_off()));
-        can_pub_->publish(std::move(table_upper.mode_dis()));
-        can_pub_->publish(std::move(doll_holder.mode_off()));
-        can_pub_->publish(std::move(doll_upper.mode_dis()));
+      can_pub_->publish(std::move(table_holder.mode_off()));
+      can_pub_->publish(std::move(table_upper.mode_dis()));
+      can_pub_->publish(std::move(doll_holder.mode_off()));
+      can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
     if(msg.buttons[5]){//台把持
-        can_pub_->publish(std::move(table_holder.update()));
+      can_pub_->publish(std::move(table_holder.update()));
     }
     if(msg.buttons[4]){//台昇降
-        can_pub_->publish(std::move(table_upper.update()));
+      can_pub_->publish(std::move(table_upper.update()));
     }
 
     if(msg.buttons[1]){//人形左翼
       doll_holder.update(servo_member::left);
     }
-    else if(msg.buttons[1]){//人形中欧
+    if(msg.buttons[1]){//人形中欧
       doll_holder.update(servo_member::center);
     }
-    else if(msg.buttons[1]){//人形右翼
+    if(msg.buttons[1]){//人形右翼
       doll_holder.update(servo_member::right);
     }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));

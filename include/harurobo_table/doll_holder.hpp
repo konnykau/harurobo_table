@@ -36,7 +36,7 @@ class servo_holder{
                     CCRs[0] = OPEN_CCR;
                 }
                 else{
-                   SERVO_STATE[0] = servo_state::close;
+                    SERVO_STATE[0] = servo_state::close;
                     CCRs[0] = CLOSE_CCR; 
                 }
             break;
@@ -46,7 +46,7 @@ class servo_holder{
                     CCRs[1] = OPEN_CCR;
                 }
                 else{
-                   SERVO_STATE[1] = servo_state::close;
+                    SERVO_STATE[1] = servo_state::close;
                     CCRs[1] = CLOSE_CCR; 
                 }
 
@@ -57,7 +57,7 @@ class servo_holder{
                     CCRs[2] = OPEN_CCR;
                 }
                 else{
-                   SERVO_STATE[2] = servo_state::close;
+                    SERVO_STATE[2] = servo_state::close;
                     CCRs[2] = CLOSE_CCR; 
                 }
 
