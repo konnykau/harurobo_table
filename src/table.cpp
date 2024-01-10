@@ -39,7 +39,7 @@ private:
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
     if(msg.buttons[5]){//台把持
-      can_pub_->publish(std::move(table_holder.update()));
+      can_pub_->publish(std::move(table_holder.update(0)));
     }
     if(msg.buttons[4]){//台昇降
       can_pub_->publish(std::move(table_upper.update()));
@@ -58,6 +58,9 @@ private:
 
     if(msg.buttons[1]){//人形昇降
       can_pub_->publish(std::move(doll_upper.update()));
+    }
+    if(msg.buttons[1]){//人形昇降の将校
+      can_pub_->publish(std::move(table_holder.update(1)));
     }
     
 
