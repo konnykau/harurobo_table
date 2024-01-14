@@ -15,7 +15,7 @@ class holder_and_upper_for_koinobori: public rclcpp::Node
 {
 public:
   holder_and_upper_for_koinobori()
-  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640,1.0f),doll_holder(0x300),doll_upper(0x660,1.0f)
+  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640),doll_holder(0x300),doll_upper(0x660)
   {
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
@@ -41,8 +41,14 @@ private:
     if(msg.buttons[5]){//台把持
       can_pub_->publish(std::move(table_holder.update(0)));
     }
-    if(msg.buttons[4]){//台昇降
-      can_pub_->publish(std::move(table_upper.update()));
+    if(msg.buttons[4]){//台昇降上げる
+      can_pub_->publish(std::move(table_upper.rise_by_vel()));
+    }
+    else if(msg.buttons[4]){//台昇降下げる
+      can_pub_->publish(std::move(table_upper.fall_by_vel()));
+    }
+    else{//止める
+      can_pub_->publish(std::move(table_upper.stop_vel()));
     }
 
     if(msg.buttons[1]){//人形左翼
@@ -56,8 +62,14 @@ private:
     }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
 
-    if(msg.buttons[1]){//人形昇降
-      can_pub_->publish(std::move(doll_upper.update()));
+    if(msg.buttons[1]){//人形昇降上げる
+      can_pub_->publish(std::move(doll_upper.rise_by_vel()));
+    }
+    else if(msg.buttons[1]){//人形昇降下げる
+      can_pub_->publish(std::move(doll_upper.fall_by_vel()));
+    }
+    else{//止める
+      can_pub_->publish(std::move(doll_upper.stop_vel()));
     }
     if(msg.buttons[1]){//人形昇降の将校
       can_pub_->publish(std::move(table_holder.update(1)));
