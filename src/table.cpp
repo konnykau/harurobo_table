@@ -4,9 +4,9 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include <can_utils.hpp>
-#include "harurobo_table/table_holder.hpp"
-#include "harurobo_table/doll_holder.hpp"
-#include "harurobo_table/table_upper.hpp"
+#include "harurobo_table/solenoid_valve.hpp"
+#include "harurobo_table/servo_holder.hpp"
+#include "harurobo_table/dc_upper.hpp"
 #include "harurobo_table/send_data.hpp"
 
 using std::placeholders::_1;

@@ -66,8 +66,15 @@ else{
 }
 ```
 
+## 発射方法
+`ros2 run joy joy_node`:joyのノードの起動
+
+`ros2 run can_plugins2 <Tab二回>`:CAN用のノードの起動
+
+`ros2 run harurobo_table holder`:把持のコードの実行
+
 # くそな点
-・汎用性が皆無<-決められた数値しか送られない方々がいらっしゃる
+・汎用性が皆無<-決められた数値しか送れない方々がいらっしゃる
 
 ・ヘッダファイルの名前がくそ
 
