@@ -8,7 +8,7 @@
 
 ## サーボ把持
 
-doll_holder.hppのなか
+servo_holder.hppのなか
 
 二値のみ取る。open ccrとclose ccrはうまく決めて
 
@@ -23,7 +23,7 @@ can_pub_->publish(std::move(doll_holder.send_servo_state()));
 
 ## エアシリ
 
-table_holder.hppのなか
+solenoid_valve.hppのなか
 
 二値のみ取る。
 
@@ -36,7 +36,7 @@ can_pub_->publish(std::move(table_holder.update(1)));//状態を変えたいと�
 
 ## DC昇降
 
-table_upper.hppのなか
+dc_upper.hppのなか
 
 Velモードかposモードか好きな方でやれる。
 
