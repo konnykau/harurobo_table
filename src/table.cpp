@@ -11,11 +11,13 @@
 
 using std::placeholders::_1;
 
+constexpr float UPPER_VEL_TARGET =1.0;
+
 class holder_and_upper_for_koinobori: public rclcpp::Node
 {
 public:
   holder_and_upper_for_koinobori()
-  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640),doll_holder(0x300),doll_upper(0x660)
+  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640,UPPER_VEL_TARGET),doll_holder(0x300),doll_upper(0x660,UPPER_VEL_TARGET)
   {
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
@@ -80,9 +82,9 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
   rclcpp::Publisher<can_plugins2::msg::Frame>::SharedPtr can_pub_;
   solv_sender table_holder;
-  DC_upper table_upper;
+  DC_upper_vel table_upper;
   servo_holder doll_holder;
-  DC_upper doll_upper;
+  DC_upper_vel doll_upper;
   
 };
 

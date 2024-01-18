@@ -46,24 +46,18 @@ VEL_TARGETはうまく決めて（昇降の速度になる予定）
 
 posモード用
 ```c++
-DC_upper DC_UPPER(0x100,15.0f);//コンストラクタの引数はCAN_IDとposモードで動かしたい距離。20以上だとシラスが電圧オーバーするかも
+DC_upper_pos DC_UPPER(0x100,15.0f);//コンストラクタの引数はCAN_IDとposモードで動かしたい距離。20以上だとシラスが電圧オーバーするかも
 
 can_pub_->publish(std::move(DC_UPPER.update()));//上がってたら下がって、下がってたら上がる
 ```
 
 velモード用
 ```c++
-DC_upper DC_UPPER(0x100);//コンストラクタの引数はCAN_IDのみ
+DC_upper_vel DC_UPPER(0x100,1.0);//コンストラクタの引数はCAN_IDとvelモードで動かしたい速さ
 
-if(/*昇降を上げるためのトリガー*/){
-    can_pub_->publish(std::move(DC_UPPER.rise_by_vel()));
-}
-else if(/*昇降を下げるためのトリガー*/){
-    can_pub_->publish(std::move(DC_UPPER.fall_by_vel()));
-}
-else{
-    can_pub_->publish(std::move(DC_UPPER.stop_vel()));
-}
+can_pub_->publish(std::move(DC_UPPER.update(rise_conditon,fall_condition)));
+//引数にとるのは上げたい時の条件と下げたいときの条件
+//どっちも満たしてないときは停止させる
 ```
 
 ## 発射方法
@@ -78,6 +72,6 @@ else{
 
 ・ヘッダファイルの名前がくそ<-修正したがなおくそ
 
-・DC_upperのなかに二つの機能が入っているのはいかがなものか
+・~~DC_upperのなかに二つの機能が入っているのはいかがなものか~~修正済み
 
 ・実際に動かしてないから動くかわかんない！
