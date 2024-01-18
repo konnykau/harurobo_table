@@ -28,9 +28,9 @@ private:
   {
     if(msg.buttons[9]){//startボタン
       can_pub_->publish(std::move(table_holder.mode_on()));
-      can_pub_->publish(std::move(table_upper.mode_pos()));
+      can_pub_->publish(std::move(table_upper.mode_vel()));
       can_pub_->publish(std::move(doll_holder.mode_on()));
-      can_pub_->publish(std::move(doll_upper.mode_pos()));
+      can_pub_->publish(std::move(doll_upper.mode_vel()));
     }//mode onにする
     if(msg.buttons[8]){//backボタン
       can_pub_->publish(std::move(table_holder.mode_off()));
