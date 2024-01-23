@@ -40,18 +40,13 @@ private:
       can_pub_->publish(std::move(doll_holder.mode_off()));
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
+
     if(msg.buttons[5]){//台把持
       can_pub_->publish(std::move(table_holder.update(0)));
     }
-    if(msg.buttons[4]){//台昇降上げる
-      can_pub_->publish(std::move(table_upper.rise_by_vel()));
-    }
-    else if(msg.buttons[4]){//台昇降下げる
-      can_pub_->publish(std::move(table_upper.fall_by_vel()));
-    }
-    else{//止める
-      can_pub_->publish(std::move(table_upper.stop_vel()));
-    }
+
+    can_pub_->publish(table_upper.update(msg.buttons[4],msg.buttons[4]));
+    //台昇降
 
     if(msg.buttons[1]){//人形左翼
       doll_holder.update(servo_member::left);
@@ -63,16 +58,11 @@ private:
       doll_holder.update(servo_member::right);
     }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
+    //人形把持
 
-    if(msg.buttons[1]){//人形昇降上げる
-      can_pub_->publish(std::move(doll_upper.rise_by_vel()));
-    }
-    else if(msg.buttons[1]){//人形昇降下げる
-      can_pub_->publish(std::move(doll_upper.fall_by_vel()));
-    }
-    else{//止める
-      can_pub_->publish(std::move(doll_upper.stop_vel()));
-    }
+    can_pub_->publish(doll_upper.update(msg.buttons[4],msg.buttons[4]));
+    //人形昇降
+
     if(msg.buttons[1]){//人形昇降の将校
       can_pub_->publish(std::move(table_holder.update(1)));
     }
