@@ -27,7 +27,7 @@ class solv_sender{
     }
     std::unique_ptr<can_plugins2::msg::Frame> update(int number)
     {
-        if(number > 7)return can_utils::shirasu_target(0x900,0x00);
+        if(number > 7)return can_utils::generate_frame(0x900,static_cast<uint16_t>(0x00));
         if(this->solv_state[number] == holder_state::unpowered){
             solv_state[number] = holder_state::powered;            
         }
@@ -41,7 +41,7 @@ class solv_sender{
                 sending_data = sending_data + power(2,i);
             }
         }
-        return can_utils::shirasu_target(this->BID + 1,sending_data);
+        return can_utils::generate_frame(this->BID + 1,sending_data);
         
     }
     // std::unique_ptr<can_plugins2::msg::Frame> close()
