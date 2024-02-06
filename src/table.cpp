@@ -17,7 +17,7 @@ class holder_and_upper_for_koinobori: public rclcpp::Node
 {
 public:
   holder_and_upper_for_koinobori()
-  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x640,UPPER_VEL_TARGET),doll_holder(0x300),doll_upper(0x660,UPPER_VEL_TARGET)
+  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x200,UPPER_VEL_TARGET),doll_holder(0x300),doll_upper(0x660,UPPER_VEL_TARGET)
   {
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
@@ -28,30 +28,30 @@ public:
 private:
   void topic_callback(const sensor_msgs::msg::Joy & msg)//この関数が随時実行されるらしい
   {
-    if(msg.buttons[9]){//startボタン
+    if(msg.buttons[7]){//startボタン
       can_pub_->publish(std::move(table_holder.mode_on()));
       can_pub_->publish(std::move(table_upper.mode_vel()));
       can_pub_->publish(std::move(doll_holder.mode_on()));
       can_pub_->publish(std::move(doll_upper.mode_vel()));
     }//mode onにする
-    if(msg.buttons[8]){//backボタン
+    if(msg.buttons[6]){//backボタン
       can_pub_->publish(std::move(table_holder.mode_off()));
       can_pub_->publish(std::move(table_upper.mode_dis()));
       can_pub_->publish(std::move(doll_holder.mode_off()));
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
 
-    if(msg.buttons[5]){//台把持
+    if(msg.buttons[0]){//台把持
       can_pub_->publish(std::move(table_holder.update(0)));
     }
 
     can_pub_->publish(table_upper.update(msg.buttons[4],msg.buttons[4]));
     //台昇降
 
-    if(msg.buttons[1]){//人形左翼
+    if(msg.buttons[2]){//人形左翼
       doll_holder.update(servo_member::left);
     }
-    if(msg.buttons[1]){//人形中欧
+    if(msg.buttons[3]){//人形中欧
       doll_holder.update(servo_member::center);
     }
     if(msg.buttons[1]){//人形右翼
@@ -60,10 +60,10 @@ private:
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
 
-    can_pub_->publish(doll_upper.update(msg.buttons[4],msg.buttons[4]));
+    can_pub_->publish(doll_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
     //人形昇降
 
-    if(msg.buttons[1]){//人形昇降の将校
+    if(msg.axes[6] == 1){//人形昇降の将校
       can_pub_->publish(std::move(table_holder.update(1)));
     }
     
