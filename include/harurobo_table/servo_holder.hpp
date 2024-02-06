@@ -1,6 +1,6 @@
 #include <can_utils.hpp>
-constexpr uint16_t OPEN_CCR = 45000;
-constexpr uint16_t CLOSE_CCR = 15000;
+constexpr uint16_t OPEN_CCR = 30000;
+constexpr uint16_t CLOSE_CCR = 20000;
 enum class servo_state{close,open};
 enum class servo_member{left,center,right};
 
