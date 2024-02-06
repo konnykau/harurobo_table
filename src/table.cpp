@@ -53,14 +53,14 @@ private:
     //台昇降
 
     if(msg.buttons[2]){//人形左翼
-      doll_holder.update(servo_member::left);
+      doll_holder.update(servo_member::left,servo_state::open);
     }
-    if(msg.buttons[3]){//人形中欧
-      doll_holder.update(servo_member::center);
+    else if(msg.buttons[3]){//人形中欧
+      doll_holder.update(servo_member::left,servo_state::close);
     }
-    if(msg.buttons[1]){//人形右翼
-      doll_holder.update(servo_member::right);
-    }
+    // if(msg.buttons[1]){//人形右翼
+    //   doll_holder.update(servo_member::right);
+    // }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
 

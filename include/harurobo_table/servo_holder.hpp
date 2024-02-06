@@ -1,5 +1,5 @@
 #include <can_utils.hpp>
-constexpr uint16_t OPEN_CCR = 30000;
+constexpr uint16_t OPEN_CCR = 40000;
 constexpr uint16_t CLOSE_CCR = 20000;
 enum class servo_state{close,open};
 enum class servo_member{left,center,right};
@@ -28,37 +28,38 @@ class servo_holder{
     {
         return can_utils::generate_frame(this->CAN_ID,static_cast<uint8_t>(0x0));
     }
-    void update(servo_member updating_subject){
+    void update(servo_member updating_subject,servo_state state){
         switch(updating_subject){
             case servo_member::left :
+            
+                SERVO_STATE[0] = state;
                 if(SERVO_STATE[0] == servo_state::close){
-                    SERVO_STATE[0] = servo_state::open;
+                    CCRs[0] = CLOSE_CCR;
+                }
+                else{
                     CCRs[0] = OPEN_CCR;
                 }
-                else{
-                    SERVO_STATE[0] = servo_state::close;
-                    CCRs[0] = CLOSE_CCR; 
-                }
+                
+                
+                
             break;
             case servo_member::center :
+                SERVO_STATE[1] = state;
                 if(SERVO_STATE[1] == servo_state::close){
-                    SERVO_STATE[1] = servo_state::open;
-                    CCRs[1] = OPEN_CCR;
+                    CCRs[1] = CLOSE_CCR;
                 }
                 else{
-                    SERVO_STATE[1] = servo_state::close;
-                    CCRs[1] = CLOSE_CCR; 
+                    CCRs[1] = OPEN_CCR;
                 }
 
             break;
             case servo_member::right :
+                SERVO_STATE[2] = state;
                 if(SERVO_STATE[2] == servo_state::close){
-                    SERVO_STATE[2] = servo_state::open;
-                    CCRs[2] = OPEN_CCR;
+                    CCRs[2] = CLOSE_CCR;
                 }
                 else{
-                    SERVO_STATE[2] = servo_state::close;
-                    CCRs[2] = CLOSE_CCR; 
+                    CCRs[2] = OPEN_CCR;
                 }
 
             break;
@@ -69,7 +70,7 @@ class servo_holder{
     std::unique_ptr<can_plugins2::msg::Frame> send_servo_state()
     {
         uint64_t returner = 0;
-        for(int i = 0;i < 4;i++){
+        for(int i = 3;i >= 0;i--){
             returner = 65536*returner;
             returner = returner + CCRs[i];
         }
