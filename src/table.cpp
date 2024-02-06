@@ -41,10 +41,10 @@ private:
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
 
-    if(msg.buttons[1]&&msg.buttons[5]){//台把持
+    if(msg.buttons[0]&&msg.buttons[5]){//台把持
       table_holder.power_on(0);
     }
-    else if(msg.buttons[1]&&msg.buttons[4]){
+    else if(msg.buttons[0]&&msg.buttons[4]){
       table_holder.unpower(0);
     }
     can_pub_->publish(std::move(table_holder.update()));
