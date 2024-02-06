@@ -65,10 +65,10 @@ private:
       doll_holder.update(servo_member::center,servo_state::close);
     }
     if(msg.buttons[1]&&msg.buttons[5]){//人形右翼開方
-      doll_holder.update(servo_member::left,servo_state::open);
+      doll_holder.update(servo_member::right,servo_state::open);
     }
     else if(msg.buttons[1]&&msg.buttons[4]){//人形右翼閉鎖
-      doll_holder.update(servo_member::left,servo_state::close);
+      doll_holder.update(servo_member::right,servo_state::close);
     }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
