@@ -41,11 +41,15 @@ private:
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
 
-    if(msg.buttons[0]){//台把持
-      can_pub_->publish(std::move(table_holder.update(0)));
+    if(msg.buttons[1]){//台把持
+      table_holder.power_on(0);
     }
+    else if(msg.buttons[3]){
+      table_holder.unpower(0);
+    }
+    can_pub_->publish(std::move(table_holder.update()));
 
-    can_pub_->publish(table_upper.update(msg.buttons[4],msg.buttons[4]));
+    can_pub_->publish(table_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
     //台昇降
 
     if(msg.buttons[2]){//人形左翼
@@ -63,9 +67,9 @@ private:
     can_pub_->publish(doll_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
     //人形昇降
 
-    if(msg.axes[6] == 1){//人形昇降の将校
-      can_pub_->publish(std::move(table_holder.update(1)));
-    }
+    // if(msg.axes[6] == 1){//人形昇降の将校
+    //   can_pub_->publish(std::move(table_holder.update(1)));
+    // }
     
 
   }

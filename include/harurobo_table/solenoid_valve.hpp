@@ -25,17 +25,9 @@ class solv_sender{
     {
         return can_utils::generate_frame(this->BID,static_cast<uint8_t>(0x0));
     }
-    std::unique_ptr<can_plugins2::msg::Frame> update(int number)
+    std::unique_ptr<can_plugins2::msg::Frame> update()
     {
-        if(number > 7)return can_utils::generate_frame(0x900,static_cast<uint16_t>(0x00));
-        if(this->solv_state[number] == holder_state::unpowered){
-            solv_state[number] = holder_state::powered;            
-        }
-        else{
-            solv_state[number] = holder_state::unpowered;           
-        }
-
-        uint16_t sending_data = 0;
+        uint8_t sending_data = 0;
         for(int i = 0;i < 8;i++){
             if(solv_state[i] == holder_state::powered){
                 sending_data = sending_data + power(2,i);
@@ -44,10 +36,14 @@ class solv_sender{
         return can_utils::generate_frame(this->BID + 1,sending_data);
         
     }
-    // std::unique_ptr<can_plugins2::msg::Frame> close()
-    // {
-    //     return can_utils::shirasu_target(this->BID + 1,static_cast<uint8_t>(0x01));
-    // }
+    void unpower(int number)
+    {
+        solv_state[number] = holder_state::unpowered;
+    }
+    void power_on(int number)
+    {
+        solv_state[number] = holder_state::powered;
+    }
     // std::unique_ptr<can_plugins2::msg::Frame> open()
     // {
     //     return can_utils::shirasu_target(this->BID + 1,static_cast<uint8_t>(0x00));
