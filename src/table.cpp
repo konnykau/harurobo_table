@@ -41,10 +41,10 @@ private:
       can_pub_->publish(std::move(doll_upper.mode_dis()));
     }//mode offにする
 
-    if(msg.buttons[1]){//台把持
+    if(msg.buttons[1]&&msg.buttons[5]){//台把持
       table_holder.power_on(0);
     }
-    else if(msg.buttons[3]){
+    else if(msg.buttons[1]&&msg.buttons[4]){
       table_holder.unpower(0);
     }
     can_pub_->publish(std::move(table_holder.update()));
@@ -52,19 +52,28 @@ private:
     can_pub_->publish(table_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
     //台昇降
 
-    if(msg.buttons[2]){//人形左翼
+    if(msg.buttons[2]&&msg.buttons[5]){//人形左翼開方
       doll_holder.update(servo_member::left,servo_state::open);
     }
-    else if(msg.buttons[3]){//人形中欧
+    else if(msg.buttons[2]&&msg.buttons[4]){//人形左翼閉鎖
       doll_holder.update(servo_member::left,servo_state::close);
     }
-    // if(msg.buttons[1]){//人形右翼
-    //   doll_holder.update(servo_member::right);
-    // }
+    if(msg.buttons[3]&&msg.buttons[5]){//人形中欧開方
+      doll_holder.update(servo_member::center,servo_state::open);
+    }
+    else if(msg.buttons[3]&&msg.buttons[4]){//人形中欧閉鎖
+      doll_holder.update(servo_member::center,servo_state::close);
+    }
+    if(msg.buttons[1]&&msg.buttons[5]){//人形右翼開方
+      doll_holder.update(servo_member::left,servo_state::open);
+    }
+    else if(msg.buttons[1]&&msg.buttons[4]){//人形右翼閉鎖
+      doll_holder.update(servo_member::left,servo_state::close);
+    }
     can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
 
-    can_pub_->publish(doll_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
+    can_pub_->publish(doll_upper.update(msg.axes[4] == 1,msg.axes[4] == -1));
     //人形昇降
 
     // if(msg.axes[6] == 1){//人形昇降の将校
