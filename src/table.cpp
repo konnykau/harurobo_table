@@ -22,6 +22,9 @@ public:
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
     can_pub_ = this->create_publisher<can_plugins2::msg::Frame>("can_tx", 10);//canに対してpublish
+    can_sub_ = this->create_subscription<can_plugins2::msg::Frame>(
+      "can_rx",10,std::bind(&holder_and_upper_for_koinobori::can_rx_callback,this,_1)
+    );
   }
   
 
@@ -82,8 +85,14 @@ private:
     
 
   }
+  void can_rx_callback(const can_plugins2::msg::Frame & can_msg){
+    if(can_msg.id == 0x201){
+      
+    }
+  }
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
   rclcpp::Publisher<can_plugins2::msg::Frame>::SharedPtr can_pub_;
+  rclcpp::Subscription<can_plugins2::msg::Frame>::SharedPtr can_sub_;
   solv_sender table_holder;
   DC_upper_vel table_upper;
   servo_holder doll_holder;
