@@ -8,6 +8,7 @@
 #include "harurobo_table/servo_holder.hpp"
 #include "harurobo_table/dc_upper.hpp"
 #include "harurobo_table/send_data.hpp"
+#include "harurobo_table/servo_holder_for_MycomBoard.hpp"
 
 using std::placeholders::_1;
 
@@ -17,11 +18,12 @@ class holder_and_upper_for_koinobori: public rclcpp::Node
 {
 public:
   holder_and_upper_for_koinobori()
-  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x200,UPPER_VEL_TARGET),doll_holder(0x300),doll_upper(0x660,UPPER_VEL_TARGET)
+  : Node("harurobo_koinobori_holder"),table_holder(0x100),table_upper(0x200,UPPER_VEL_TARGET),doll_holder(0x20F,0x201,0x202,0x203),doll_upper(0x660,UPPER_VEL_TARGET)
   {
     subscription_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
     can_pub_ = this->create_publisher<can_plugins2::msg::Frame>("can_tx", 10);//canに対してpublish
+    PID_pub_ = this->create_publisher<std_msgs::msg::String>("PID_topic", 10);
   }
   
 
@@ -53,24 +55,24 @@ private:
     //台昇降
 
     if(msg.buttons[2]&&msg.buttons[5]){//人形左翼開方
-      doll_holder.update(servo_member::left,servo_state::open);
+      can_pub_->publish(std::move(doll_holder.update(1,true)));
     }
     else if(msg.buttons[2]&&msg.buttons[4]){//人形左翼閉鎖
-      doll_holder.update(servo_member::left,servo_state::close);
+      can_pub_->publish(std::move(doll_holder.update(1,false)));
     }
     if(msg.buttons[3]&&msg.buttons[5]){//人形中欧開方
-      doll_holder.update(servo_member::center,servo_state::open);
+      can_pub_->publish(std::move(doll_holder.update(2,true)));
     }
     else if(msg.buttons[3]&&msg.buttons[4]){//人形中欧閉鎖
-      doll_holder.update(servo_member::center,servo_state::close);
+      can_pub_->publish(std::move(doll_holder.update(2,false)));
     }
     if(msg.buttons[1]&&msg.buttons[5]){//人形右翼開方
-      doll_holder.update(servo_member::right,servo_state::open);
+      can_pub_->publish(std::move(doll_holder.update(3,true)));
     }
     else if(msg.buttons[1]&&msg.buttons[4]){//人形右翼閉鎖
-      doll_holder.update(servo_member::right,servo_state::close);
+      can_pub_->publish(std::move(doll_holder.update(3,false)));
     }
-    can_pub_->publish(std::move(doll_holder.send_servo_state()));
+    // can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
 
     can_pub_->publish(doll_upper.update(msg.axes[4] == 1,msg.axes[4] == -1));
@@ -84,9 +86,10 @@ private:
   }
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
   rclcpp::Publisher<can_plugins2::msg::Frame>::SharedPtr can_pub_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr PID_pub_;
   solv_sender table_holder;
   DC_upper_vel table_upper;
-  servo_holder doll_holder;
+  servo_for_MycomBoard doll_holder;
   DC_upper_vel doll_upper;
   
 };
