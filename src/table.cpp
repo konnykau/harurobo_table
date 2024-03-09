@@ -53,10 +53,10 @@ private:
 
     // can_pub_->publish(table_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
 
-    if(msg.buttons[3]){//大昇降up
+    if(msg.axes[7] == 1){//大昇降up
       can_pub_->publish(std::move(doll_holder.update(2,true)));
     }
-    else if(msg.buttons[0]){//台昇降down
+    else if(msg.axes[7] == -1){//台昇降down
       can_pub_->publish(std::move(doll_holder.update(2,false)));
     }
     //台昇降
@@ -82,7 +82,7 @@ private:
     // can_pub_->publish(std::move(doll_holder.send_servo_state()));
     //人形把持
 
-    can_pub_->publish(doll_upper.update(msg.axes[4] == 1,msg.axes[4] == -1));
+    can_pub_->publish(doll_upper.update(msg.buttons[3],msg.buttons[0]));
     //人形昇降
 
     // if(msg.axes[6] == 1){//人形昇降の将校
