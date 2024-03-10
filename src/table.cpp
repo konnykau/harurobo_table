@@ -88,7 +88,7 @@ private:
     // if(msg.axes[6] == 1){//人形昇降の将校
     //   can_pub_->publish(std::move(table_holder.update(1)));
     // }
-    if((msg.axes[3] != 0)||(msg.axes[4] != 0)){//LED ->右スティックを動かす
+    if(msg.buttons[4]&&msg.buttons[5]){//LED ->右スティックを動かす
       can_pub_->publish(std::move(can_utils::generate_frame(0x20E,static_cast<uint8_t>(0x1))));
     }
     else{
