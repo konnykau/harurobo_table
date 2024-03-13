@@ -24,6 +24,7 @@ public:
       "joy", 10, std::bind(&holder_and_upper_for_koinobori::topic_callback, this, _1));//joy == コントローラーの入力をsubscription
     can_pub_ = this->create_publisher<can_plugins2::msg::Frame>("can_tx", 10);//canに対してpublish
     // PID_pub_ = this->create_publisher<std_msgs::msg::String>("PID_topic", 10);
+    doll_holder_state = false;
   }
   
 
