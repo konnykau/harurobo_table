@@ -54,10 +54,22 @@ private:
     // can_pub_->publish(table_upper.update(msg.axes[7] == 1,msg.axes[7] == -1));
 
     if(msg.axes[7] == 1){//大昇降up
-      can_pub_->publish(std::move(doll_holder.update(2,true)));
+      if(!doll_holder_state){
+        can_pub_->publish(std::move(doll_holder.update(2,true)));
+        doll_holder_state = true;
+      }
     }
-    else if(msg.axes[7] == -1){//台昇降down
-      can_pub_->publish(std::move(doll_holder.update(2,false)));
+    else {
+      doll_holder_state = false;
+    }
+    if(msg.axes[7] == -1){//台昇降down
+      if(!doll_holder_state){
+        can_pub_->publish(std::move(doll_holder.update(2,false)));
+        doll_holder_state = true;
+      }
+    }
+    else {
+      doll_holder_state = false;
     }
     //台昇降
 
@@ -105,6 +117,7 @@ private:
   // DC_upper_vel table_upper;
   servo_for_MycomBoard doll_holder;
   DC_upper_vel doll_upper;
+  bool doll_holder_state;
   
 };
 
